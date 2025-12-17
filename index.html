@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bot WhatsApp - PAN XITERS Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --whatsapp-green: #25D366;
+            --whatsapp-dark: #128C7E;
+            --dark-bg: #0c0f1e;
+            --card-bg: #1a1d2e;
+            --text-light: #ffffff;
+            --text-gray: #b0b3b8;
+            --accent: #00b894;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #1a1a2e 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Header Styles */
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            margin-bottom: 30px;
+            background: rgba(18, 140, 126, 0.1);
+            border-radius: 20px;
+            border: 1px solid rgba(37, 211, 102, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            background: linear-gradient(135deg, var(--whatsapp-green), var(--whatsapp-dark));
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            box-shadow: 0 0 20px rgba(37, 211, 102, 0.4);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(to right, var(--whatsapp-green), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Navigation Styles */
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: var(--card-bg);
+            border: 2px solid rgba(37, 211, 102, 0.3);
+            color: var(--text-light);
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(37, 211, 102, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .nav-btn.active {
+            background: linear-gradient(135deg, var(--whatsapp-green), var(--whatsapp-dark));
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+        }
+        
+        /* Content Styles */
+        .content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Product Styles */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .category-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .category-header {
+            background: linear-gradient(135deg, rgba(37, 211, 102, 0.2), rgba(18, 140, 126, 0.2));
+            padding: 20px;
+            border-bottom: 1px solid rgba(37, 211, 102, 0.3);
+        }
+        
+        .category-title {
+            font-size: 1.4rem;
+            color: var(--whatsapp-green);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .product-list {
+            padding: 20px;
+        }
+        
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .product-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            padding-left: 10px;
+            padding-right: 10px;
+            border-radius: 8px;
+        }
+        
+        .product-item:last-child {
+            border-bottom: none;
+        }
+        
+        .product-name {
+            font-size: 1.1rem;
+            color: var(--text-light);
+        }
+        
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent);
+            background: rgba(0, 184, 148, 0.1);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+        
+        /* Payment Styles */
+        .payment-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+        
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            width: 100%;
+        }
+        
+        .payment-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .payment-card:hover {
+            border-color: var(--whatsapp-green);
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.2);
+        }
+        
+        .payment-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .dana-icon {
+            color: #0095DA;
+        }
+        
+        .gopay-icon {
+            color: #00AA13;
+        }
+        
+        .payment-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--text-light);
+        }
+        
+        .payment-number {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--whatsapp-green);
+            background: rgba(37, 211, 102, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border: 2px dashed var(--whatsapp-green);
+            word-break: break-all;
+        }
+        
+        /* WhatsApp Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, var(--whatsapp-green), var(--whatsapp-dark));
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.5);
+            z-index: 1000;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.7);
+        }
+        
+        /* Instructions */
+        .instructions {
+            background: rgba(37, 211, 102, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 40px;
+            border: 1px solid rgba(37, 211, 102, 0.3);
+        }
+        
+        .instructions h3 {
+            color: var(--whatsapp-green);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .instructions ol {
+            padding-left: 20px;
+            color: var(--text-gray);
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+            color: var(--text-gray);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .whatsapp-float {
+                bottom: 20px;
+                right: 20px;
+                width: 60px;
+                height: 60px;
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <div class="logo">
+                    <i class="fab fa-whatsapp"></i>
+                </div>
+                <div>
+                    <h1>PAN XITERS WhatsApp Bot</h1>
+                    <p class="subtitle">File Android & iPhone | FF Mod | XIT ADNRO - Hubungi kami via WhatsApp untuk pemesanan</p>
+                </div>
+            </div>
+        </header>
+        
+        <div class="nav-container">
+            <button class="nav-btn active" data-tab="produk">
+                <i class="fas fa-box-open"></i> PRODUK
+            </button>
+            <button class="nav-btn" data-tab="payment">
+                <i class="fas fa-credit-card"></i> PAYMENT
+            </button>
+        </div>
+        
+        <!-- Produk Content -->
+        <div id="produk" class="content active">
+            <div class="product-grid">
+                <!-- File Android -->
+                <div class="category-card">
+                    <div class="category-header">
+                        <h2 class="category-title">
+                            <i class="fas fa-mobile-alt"></i> FILE ANDROID 📱
+                        </h2>
+                    </div>
+                    <div class="product-list">
+                        <div class="product-item" data-product="File Aimlock Hs 40%" data-price="10k">
+                            <span class="product-name">File Aimlock Hs 40%</span>
+                            <span class="product-price">10k</span>
+                        </div>
+                        <div class="product-item" data-product="File Aimlock Hs 65%" data-price="15k">
+                            <span class="product-name">File Aimlock Hs 65%</span>
+                            <span class="product-price">15k</span>
+                        </div>
+                        <div class="product-item" data-product="File Aimlock Hs 80%" data-price="25k">
+                            <span class="product-name">File Aimlock Hs 80%</span>
+                            <span class="product-price">25k</span>
+                        </div>
+                        <div class="product-item" data-product="File Aimlock Hs 100%" data-price="50k">
+                            <span class="product-name">File Aimlock Hs 100%</span>
+                            <span class="product-price">50k</span>
+                        </div>
+                        <div class="product-item" data-product="Hologram" data-price="25k">
+                            <span class="product-name">Hologram</span>
+                            <span class="product-price">25k</span>
+                        </div>
+                        <div class="product-item" data-product="Magic Bullet" data-price="50k">
+                            <span class="product-name">Magic Bullet</span>
+                            <span class="product-price">50k</span>
+                        </div>
+                        <div class="product-item" data-product="Cheat Headshot" data-price="90k">
+                            <span class="product-name">Cheat Headshot</span>
+                            <span class="product-price">90k</span>
+                        </div>
+                        <div class="product-item" data-product="Badan Headshot" data-price="120k">
+                            <span class="product-name">Badan Headshot</span>
+                            <span class="product-price">120k</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- XIT ADNRO -->
+                <div class="category-card">
+                    <div class="category-header">
+                        <h2 class="category-title">
+                            <i class="fas fa-robot"></i> XIT ADNRO 📱
+                        </h2>
+                    </div>
+                    <div class="product-list">
+                        <div class="product-item" data-product="XIT DRAG HS ZIEXTERA" data-price="50K">
+                            <span class="product-name">XIT DRAG HS ZIEXTERA</span>
+                            <span class="product-price">50K</span>
+                        </div>
+                        <div class="product-item" data-product="XIT DRAG ALL TAP" data-price="100K">
+                            <span class="product-name">XIT DRAG ALL TAP</span>
+                            <span class="product-price">100K</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- FF MOD ANDROID & EMULATOR -->
+                <div class="category-card">
+                    <div class="category-header">
+                        <h2 class="category-title">
+                            <i class="fas fa-gamepad"></i> FF MOD ANDROID & EMULATOR 📱
+                        </h2>
+                    </div>
+                    <div class="product-list">
+                        <div class="product-item" data-product="FF EASY DRAG" data-price="35K">
+                            <span class="product-name">FF EASY DRAG</span>
+                            <span class="product-price">35K</span>
+                        </div>
+                        <div class="product-item" data-product="FF V7A EMULATOR" data-price="30K">
+                            <span class="product-name">FF V7A EMULATOR</span>
+                            <span class="product-price">30K</span>
+                        </div>
+                        <div class="product-item" data-product="FF V7A+V8A STABIL" data-price="40K">
+                            <span class="product-name">FF V7A+V8A STABIL</span>
+                            <span class="product-price">40K</span>
+                        </div>
+                        <div class="product-item" data-product="FF AIMLOCK HS" data-price="60K">
+                            <span class="product-name">FF AIMLOCK HS</span>
+                            <span class="product-price">60K</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- FILE I-PHONE -->
+                <div class="category-card">
+                    <div class="category-header">
+                        <h2 class="category-title">
+                            <i class="fab fa-apple"></i> FILE I-PHONE 📱
+                        </h2>
+                    </div>
+                    <div class="product-list">
+                        <div class="product-item" data-product="Easy Drag" data-price="30k">
+                            <span class="product-name">Easy Drag</span>
+                            <span class="product-price">30k</span>
+                        </div>
+                        <div class="product-item" data-product="Hologram iPhone" data-price="50k">
+                            <span class="product-name">Hologram</span>
+                            <span class="product-price">50k</span>
+                        </div>
+                        <div class="product-item" data-product="Magic Bullet iPhone" data-price="80k">
+                            <span class="product-name">Magic Bullet</span>
+                            <span class="product-price">80k</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3><i class="fas fa-info-circle"></i> Cara Pesan:</h3>
+                <ol>
+                    <li>Klik produk yang ingin dipesan untuk membuat pesan otomatis di WhatsApp</li>
+                    <li>Atau klik tombol WhatsApp di pojok kanan bawah untuk langsung menghubungi kami</li>
+                    <li>Kirim bukti transfer setelah melakukan pembayaran</li>
+                    <li>File akan dikirimkan setelah pembayaran dikonfirmasi</li>
+                </ol>
+            </div>
+        </div>
+        
+        <!-- Payment Content -->
+        <div id="payment" class="content">
+            <div class="payment-container">
+                <div class="payment-methods">
+                    <div class="payment-card">
+                        <div class="payment-icon dana-icon">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <h3 class="payment-title">DANA</h3>
+                        <p>Transfer ke nomor berikut:</p>
+                        <div class="payment-number">085882337743</div>
+                        <p style="margin-top: 15px; color: var(--text-gray);">A.n: PAN XITERS Store</p>
+                    </div>
+                    
+                    <div class="payment-card">
+                        <div class="payment-icon gopay-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3 class="payment-title">GO-PAY</h3>
+                        <p>Transfer ke nomor berikut:</p>
+                        <div class="payment-number">085882337743</div>
+                        <p style="margin-top: 15px; color: var(--text-gray);">A.n: PAN XITERS Store</p>
+                    </div>
+                </div>
+                
+                <div class="instructions">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Instruksi Pembayaran:</h3>
+                    <ol>
+                        <li>Lakukan transfer sesuai harga produk ke salah satu nomor di atas</li>
+                        <li>Simpan bukti transfer (screenshot)</li>
+                        <li>Hubungi kami via WhatsApp dan kirimkan bukti transfer</li>
+                        <li>File akan dikirimkan via WhatsApp setelah pembayaran dikonfirmasi</li>
+                        <li>Pastikan nomor tujuan transfer sudah benar sebelum melakukan transfer</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 PAN XITERS WhatsApp Bot. Semua file bersifat digital dan akan dikirim via WhatsApp.</p>
+            <p style="margin-top: 10px;">Hubungi: 085882337743 (WhatsApp only)</p>
+        </footer>
+    </div>
+    
+    <!-- WhatsApp Float Button -->
+    <a href="#" id="whatsappFloat" class="whatsapp-float">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        // WhatsApp Configuration
+        const WHATSAPP_NUMBER = "6285882337743"; // Format internasional
+        const BUSINESS_NAME = "PAN XITERS Store";
+        
+        // Tab Navigation
+        document.querySelectorAll('.nav-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and content
+                document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.content').forEach(content => content.classList.remove('active'));
+                
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                // Show corresponding content
+                const tabId = button.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Function to send WhatsApp message
+        function sendWhatsAppMessage(message) {
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
+            window.open(whatsappUrl, '_blank');
+        }
+        
+        // Product click event
+        document.querySelectorAll('.product-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const productName = this.getAttribute('data-product');
+                const productPrice = this.getAttribute('data-price');
+                
+                let message = `Halo ${BUSINESS_NAME}, saya ingin pesan:\n`;
+                message += `Produk: *${productName}*\n`;
+                message += `Harga: *${productPrice}*\n\n`;
+                message += `Bisa info lebih lanjut dan cara ordernya?`;
+                
+                sendWhatsAppMessage(message);
+            });
+        });
+        
+        // WhatsApp float button click event
+        document.getElementById('whatsappFloat').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Check which tab is active
+            const activeTab = document.querySelector('.content.active').id;
+            let message = `Halo ${BUSINESS_NAME},\n`;
+            
+            if (activeTab === 'produk') {
+                message += `Saya tertarik dengan produk dari PAN XITERS.\n`;
+                message += `Bisa minta info lengkap tentang produk dan cara order?`;
+            } else if (activeTab === 'payment') {
+                message += `Saya mau konfirmasi pembayaran untuk produk PAN XITERS.\n`;
+                message += `Bisa dibantu?`;
+            }
+            
+            sendWhatsAppMessage(message);
+        });
+        
+        // Auto-generate WhatsApp message for payment info
+        function generatePaymentMessage() {
+            let message = `Halo ${BUSINESS_NAME},\n`;
+            message += `Saya sudah transfer untuk pembelian produk.\n`;
+            message += `Berikut detailnya:\n`;
+            message += `- Produk: [Nama Produk]\n`;
+            message += `- Harga: [Total Harga]\n`;
+            message += `- Metode: [DANA/GO-PAY]\n\n`;
+            message += `Bukti transfer saya kirim di gambar berikut.`;
+            
+            return message;
+        }
+        
+        // Initialize with animation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add initial animation to cards
+            const cards = document.querySelectorAll('.category-card, .payment-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100 * index);
+            });
+            
+            // Add click animation to buttons
+            const buttons = document.querySelectorAll('.nav-btn, .whatsapp-float');
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+        });
+        
+        // Add confirmation for product clicks
+        document.querySelectorAll('.product-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Visual feedback
+                this.style.background = 'rgba(37, 211, 102, 0.2)';
+                setTimeout(() => {
+                    this.style.background = '';
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>
